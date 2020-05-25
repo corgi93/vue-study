@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue.js start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+
+    <!-- view  -->
+    <div id="simple">
+        <span>{{ message }}</span>
+        <div v-text="message" style="color: red" ></div>
+        <div v-html="message" style="color: red" ></div>
+    </div>
+
+
+<script>
+    // model
+    const model = {
+        message: "<h1>first vue.js application</h1>",
+    }
+
+    // view model
+    const simple = new Vue({
+        el: "#simple",
+        data: model
+    })
+</script>
+</body>
+</html>
