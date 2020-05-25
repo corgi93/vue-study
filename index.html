@@ -16,20 +16,51 @@
         <span>{{ message }}</span>
         <div v-text="message" style="color: red" ></div>
         <div v-html="message" style="color: red" ></div>
+        <!-- v-bind는 콘텐츠 영역이 아닌, 속성 값 바인딩! :src만 작성해도 됨 -->
+        <div><img v-bind:src="imagePath" style=" width: 200px; height: 200px"></div>
+        <!-- 위의 디렉티브들은 모두 단방향. 요소(element)에서 변경한 값이 모델 object에 반영되려면 양방향 바인딩이 필요.
+            그 디렉티브가 v-model. -->
+        <div><input v-bind:value="name" v-model="name" id="name" type="text" placeholder="이름을 입력하세요" /></div>
+        <div><h3 v-html="name"></h3></div>
+
+        <div id="simple1">
+            <div> 좋아하는 과일들 모두 골라주세요 : </div>
+            <input type="checkbox" value="1" v-model="fruits">사과,
+            <input type="checkbox" value="2" v-model="fruits">키위,
+            <input type="checkbox" value="3" v-model="fruits">포도,
+            <input type="checkbox" value="4" v-model="fruits">수박,
+            <input type="checkbox" value="5" v-model="fruits">참외
+        </div>
+        <div id="simple2">
+            선택한 과일들 : <span v-html="fruits"></span>
+        </div>
+
     </div>
-
-
 <script>
     // model
     const model = {
         message: "<h1>first vue.js application</h1>",
+        imagePath: "http://sample.bmaster.kro.kr/photos/61.jpg",
+        name: '너의 이름은',
+        fruits: []
     }
 
     // view model
     const simple = new Vue({
-        el: "#simple",
+        el:"#simple",
         data: model
     })
+
+    const simple1 = new Vue({
+        el: "simple1",
+        data: model
+    })
+
+    const simple2 = new Vue({
+        el: "simple2",
+        data: model
+    })
+
 </script>
 </body>
 </html>
