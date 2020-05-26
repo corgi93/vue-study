@@ -1,0 +1,132 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        #list {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        #list td, #list th{
+            border : 1px solid black;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div id="example">
+    <table id="list">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>이름</th>
+                <th>전화번호</th>
+                <th>주소</th>
+            </tr>
+        </thead>
+        <tbody id="contacts">
+        <template v-for="(contact, index) in contacts">
+            <tr :key="contact.no">
+                <td>{{contact.no}}</td>
+                <td>{{contact.name}}</td>
+                <td>{{contact.tel}}</td>
+                <td>{{contact.addr}}</td>
+            </tr>
+
+            <tr class="divider" style="background-color: gray" v-if="index % 5 === 4">
+                <td colspan="4"></td>
+            </tr>
+        </template>
+        </tbody>
+    </table>
+    <br>
+
+    <select id="regions">
+        <option disabled="disabled" selected> 지역을 선택하세요 </option>
+        <option v-for="(val,key,index) in regions" v-bind:value="key">{{ index +1 }} : {{val.concat("!")}}</option>
+    </select>
+
+    <input type="text" v-model="num" />
+    1부터 입력된 수까지의 합: <span><b>{{ sum }}</b></span>
+
+</div>
+<script>
+    // object의 array
+    const models = {
+        "pageNo": 1, "pageSize" : 10,
+        "totalCount":100,
+        "contacts": [
+            {
+                "no": 1,
+                "name": "혁진",
+                "tel" : "010-1111-2222",
+                "addr" : "서울시 동작구"
+            },{
+                "no": 2,
+                "name": "유진",
+                "tel" : "010-1122-2211",
+                "addr" : "서울시 서초구"
+            },{
+                "no": 3,
+                "name": "소진",
+                "tel" : "010-2222-3333",
+                "addr" : "서울시 송파구"
+            },{
+                "no": 4,
+                "name": "하진",
+                "tel" : "010-2233-3344",
+                "addr" : "경기도 화성시"
+            },{
+                "no": 5,
+                "name": "기진",
+                "tel" : "010-2233-3344",
+                "addr" : "서울시 중구"
+            },{
+                "no": 6,
+                "name": "서진",
+                "tel" : "010-2233-3344",
+                "addr" : "부산시 서면"
+            },{
+                "no": 7,
+                "name": "마진",
+                "tel" : "010-2233-3344",
+                "addr" : "강원도 동해시"
+            }
+        ]
+    }
+    // object
+    const regions  = {
+        "a" : "asia",
+        "b" : "America",
+        "c" : "Europe",
+        "d" : "Africa",
+        "e" : "Oceania"
+    }
+
+    const list = new Vue({
+        el: "#example",
+        data:  { models, num : 0},
+        computed: {
+            sum : function(){
+                const n = Number(this.num);
+                if(Number.isNaN(n) || n <1 ) return 0;
+                return ((1+n ) * n) /2;
+            }
+        }
+    })
+
+    // const list2 = new Vue({
+    //       el : "#example",
+    //     data: { regions :regions}
+    // })
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="account">
+        예금액: <input type="text" v-model="amount" />
+        <h3 v-if="amount < 0">0보다 적을 수 없습니다.</h3>
+        <br />
+        잔고 : <input type="text"  v-model="balance"/>
+        <br />
+
+        <div>
+            회원 등급:
+            <span v-if="balance > 100000">Gold</span>
+            <span v-else-if="balance >= 70000">Silver</span>
+            <span v-else-if="balance > 50000">Bronze</span>
+            <span v-else>Basic</span>
+        </div>
+
+    </div>
+<script>
+    const simple1 = new Vue({
+        el: "#account",
+        data: {
+            amount: 0,
+            balance: 0
+        }
+    })
+
+    const simple2 = new Vue({
+
+    })
+</script>
+</body>
+</html>
