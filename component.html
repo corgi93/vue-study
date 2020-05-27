@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>06-05</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+<!-- 컴포넌트에서 data 옵션 -->
+<template id="timeTemplate">
+    <div>
+        <span>{{nowTS}}</span>
+        <button v-on:click="timeClick">현재 시간</button>
+    </div>
+</template>
+
+<script type="text/x-template" id="helloTemplate">
+    <div>hello world!!!</div>
+</script>
+<!-- vue 컴포넌트 -->
+<script type="text/javascript">
+    Vue.component('hello-component', {
+        template: '#helloTemplate'
+    })
+
+    Vue.component('option-component', {
+        template: '<option>hello</option>'
+    })
+
+    Vue.component('time-component', {
+        template: '#timeTemplate',
+        /* data옵션에 객체가 아닌 함수를 지정하는 것은 여러 번 컴포넌트를 사용해도
+           동일한 객체를 가리키는 게 아니라 함수 호출시 생성된 그 객체를 리턴. 결국 다시 사용하더라도
+           서로 다른 객체들.
+         */
+        data: function(){
+            return { nowTS : 0 }
+        },
+        methods: {
+            timeClick: function(e){
+                this.nowTS = (new Date()).getTime();
+            }
+        }
+    })
+</script>
+
+<script type="text/x-template" id="selectTemplate" >
+    <select>
+        <option-component></option-component>
+        <option-component></option-component>
+    </select>
+</script>
+
+<script type="text/javascript">
+    Vue.component('select-component',{
+        template: "#selectTemplate"
+    })
+</script>
+
+<body>
+<div id="app">
+    <hello-component></hello-component>
+    <hello-component></hello-component>
+    <hello-component></hello-component>
+
+    <select>
+        <option is="option-component"></option>
+        <option is="option-component"></option>
+        <option is="option-component"></option>
+    </select>
+
+    <time-component></time-component>
+    <time-component></time-component>
+</div>
+
+</body>
+<script type="text/javascript">
+    Vue.config.devtools = true;
+    const v = new Vue({
+        el: '#app'
+    })
+</script>
+</html>

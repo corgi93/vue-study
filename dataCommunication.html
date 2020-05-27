@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<!-- list 컴포넌트 -->
+<template id="listTemplate">
+    <div>
+        <li>{{ myMessage }}</li>
+        <span>{{count}}</span>
+    </div>
+</template>
+
+<script type="text/javascript">
+    Vue.component('list-component', {
+        template: '#listTemplate',
+        props: {
+            myMessage : {type: String , default: '안녕하세요'},
+            count : { type: Number, required: true},
+            countries : {
+                type: Array,
+                default: function(){
+                    return ['대한민국'];
+                }
+            }
+        },
+    })
+</script>
+
+<body>
+    <div id="app">
+        <ul>
+            <!--  count는 넘버형인데 리터럴로 속성을 전달하므로 v-bind로 바인드해 전달합니다. :로 생략가능   -->
+            <list-component my-message="리스트1" :count="12"></list-component>
+            <list-component my-message="리스트2" v-bind:count="23"></list-component>
+            <list-component my-message="리스트3" :count="1000"></list-component>
+        </ul>
+        <br>
+        <ul>
+            <list-component my-message="hello" v-bind:count="100" v-bind:countries="['미국', '영국', '호주']"></list-component>
+            <list-component my-message="신짜오" v-bind:count="21" v-bind:countries="['베트남']"></list-component>
+            <list-component my-message="니하오마" v-bind:count="1" v-bind:countries="['중국', '타이완']"></list-component>
+        </ul>
+    </div>
+
+    <!--viewModel-->
+    <script>
+        const vm = new Vue({
+            el: "#app"
+        })
+    </script>
+</body>
+</html>

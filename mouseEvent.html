@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <style>
+        .set1{
+            background-color: aquamarine;
+            color: #ff0000;
+        }
+        .set2{
+            text-align: center;
+            width: 120px;
+        }
+        .set3{
+            border: 1px dashed sandybrown;
+        }
+
+
+        .score { border: solid 1px black; }
+        .warning { background-color: orange; color: purple; }
+        .warnimage { width: 18px; height: 18px; top: 5px; position: relative; }
+
+        .boxColor{
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+<div id="example" v-on:contextmenu="ctxStop" @mouseup.left="leftMouse" @mouseup.right="rightMouse">
+    <div v-bind:style="style1">
+        왼쪽으로<br />
+        오른쪽으로
+    </div>
+    <img src="images/foot.jpg" v-bind:style="{ position : 'absolute', left: pos.left + 'px', top: pos.top + 'px' }" />
+
+    <button id="btn1" v-bind:style="[myColor, myLayout]">
+        버튼1
+    </button>
+
+    <button v-bind:class="checkBoxStyle">
+        버튼2
+    </button>
+
+    <p>
+        <input type="checkbox" v-model="checkBoxStyle.set1" value="tre"/>set1 디자인
+        <input type="checkbox" v-model="checkBoxStyle.set2" value="tre"/>set2 디자인
+        <input type="checkbox" v-model="checkBoxStyle.set3" value="tre"/>set3 디자인
+    </p>
+
+    <div>
+        점수 : <input type="text" class="score" v-model.num="score" v-bind:class="info" />
+        <img src="images/error.png" class="warnimage" v-show="info.warning" />
+    </div>
+
+    <center-box v-bind:class="boxStyle"></center-box>
+</div>
+
+<script>
+    // vue component 스타일
+    Vue.component('center-box', {
+        template: '<div class="center"> 중앙에 위치 </div>'
+    })
+
+    const vm = new Vue({
+        el: "#example",
+        data: {
+            boxStyle: {
+                boxColor:true
+            },
+            pos: {left: 100, right: 100},
+            style1: {
+                width: '100px',
+                borderRadius:'10px',
+                border: '1px solid #ff00ff'
+            },
+            myColor: {
+                color: '#ff0000',
+                backgroundColor: '#e2e2e2'
+            },
+            myLayout: {
+                height: '100px'
+            },
+            checkBoxStyle :{ set1: false , set2: false, set3: false},
+            score: 0
+        },
+        computed : {
+            info : function () {
+                if(this.score >= 1 && this.score <= 100){
+                    return { warning: false }
+                }else{
+                    return {warning: true}
+                }
+            }
+        },
+        methods: {
+            ctxStop: function (e) {
+                e.preventDefault();
+            },
+            leftMouse: function (e) {
+                if (this.pos.left > 30) {
+                    this.pos.left -= 30;
+                    console.log("move left!");
+                }
+            },
+            rightMouse: function (e) {
+                this.pos.left += 30;
+                console.log("move right!");
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
