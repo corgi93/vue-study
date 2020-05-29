@@ -100,29 +100,113 @@
             text-align: center;
             color: white;
         }
-
-
-
     </style>
 </head>
+
+<!-- eventBus 객체 생성 -->
+<script>
+    const eventBus = new Vue();
+</script>
+
+<!-- 입력 컴포넌트 (input) -->
+<template id="inputTemplate">
+    <div id="header" class="header">
+        <h2> Todo List App</h2>
+        <input class="input" type="text" id="task" v-model.trim="todo" placeholder="입력 후 엔터" />
+        <span class="addbutton" v-on:click="addTodo">추 가</span>
+    </div>
+</template>
+<script>
+    Vue.component('input-component', {
+        template: "#inputTemplate",
+        data: function() {
+            return {
+                todo: ""
+            }
+        },
+        methods: {
+            addTodo: function(){
+                // emit 호출해서 이벤트 발신.
+                eventBus.$emit('add-todo', this.todo);
+                this.todo = "";
+            }
+        }
+    })
+</script>
+
+<!-- 리스트 컴포넌트 (list) -->
+<template id="listTemplate">
+    <ul id="todolist">
+        <li v-for="todo in todolist" v-bind:class="checked(todo.done)" v-on:click="doneToggle(todo.id)" >
+            <span>{{todo.todo}}</span>
+            <span v-if="todo.done"> (완료) </span>
+            <span class="close" v-on:click="deleteTodo(todo.id)">&#x00d7;</span>
+        </li>
+    </ul>
+</template>
+<script>
+    Vue.component('list-component', {
+        template: "#listTemplate",
+        created : function () {
+            eventBus.$on('add-todo', this.addTodo);
+        },
+        data: function(){
+            return {
+                todolist: [
+                    { id : 1, todo : "vue.js", done: false },
+                    { id : 2, todo : "webRTC", done: false },
+                    { id : 3, todo : "three.js", done: false },
+                    { id : 4, todo : "node.js", done: false },
+                ]
+            }
+        },
+        methods: {
+            checked: function(done){
+                if(done){
+                    return { checked :true }
+                }else {
+                    return { checked: false }
+                }
+            },
+            addTodo: function(todo){
+                if( todo !== "" ){
+                    this.todolist.push({ id: new Date().getTime() , todo: todo, done: false });
+                }
+            },
+            doneToggle : function(id) {
+                const index = this.todolist.findIndex(function (item) {
+                    return item.id === id;
+                })
+                this.todolist[index].done = !this.todolist[index].done;
+            },
+            deleteTodo: function(id){
+                const index = this.todolist.findIndex(function(item){
+                    return item.id === id;
+                })
+                this.todolist.splice( index,1);
+            }
+        }
+    })
+</script>
+
 <body>
     <div id="todolistapp">
-        <div id="header" class="header">
-            <h2> Todo List App</h2>
-            <input class="input" type="text" id="task" v-model.trim="todo" placeholder="입력 후 엔터" />
-            <span class="addbutton" v-on:click="addTodo">추 가</span>
-        </div>
+        <input-component></input-component>
+        <list-component></list-component>
+<!--        <div id="header" class="header">-->
+<!--            <h2> Todo List App</h2>-->
+<!--            <input class="input" type="text" id="task" v-model.trim="todo" placeholder="입력 후 엔터" />-->
+<!--            <span class="addbutton" v-on:click="addTodo">추 가</span>-->
+<!--        </div>-->
 
-        <ul id="todolist">
-            <li v-for="todo in todolist" v-bind:class="checked(todo.done)" v-on:click="doneToggle(todo.id)" >
-                <span>{{todo.todo}}</span>
-                <span v-if="todo.done"> (완료) </span>
-                <span class="close" v-on:click="deleteTodo(todo.id)">&#x00d7;</span>
-            </li>
-        </ul>
+<!--        <ul id="todolist">-->
+<!--            <li v-for="todo in todolist" v-bind:class="checked(todo.done)" v-on:click="doneToggle(todo.id)" >-->
+<!--                <span>{{todo.todo}}</span>-->
+<!--                <span v-if="todo.done"> (완료) </span>-->
+<!--                <span class="close" v-on:click="deleteTodo(todo.id)">&#x00d7;</span>-->
+<!--            </li>-->
+<!--        </ul>-->
     </div>
-
-
 <script>
     const vm = new Vue({
         el:"#todolistapp",
@@ -135,38 +219,36 @@
                 { id: 4, todo: "three.js" , done: false }
             ]
         },
-        methods:{
-            checked: function(done) {
-                console.log(done);
-                if (done) {
-                    return {
-                        checked: true
-                    };
-                } else {
-                    checked: false
-                }
-            },
-            addTodo: function(e){
-                if( this.todo.trim() !== ""){
-                    this.todolist.push({ id : new Date().getTime(), todo : this.todo.trim(), done:false });
-                    this.todo = "";
-
-
-                }
-            },
-            deleteTodo: function(id){
-                const index = this.todolist.findIndex(function(item){
-                    return item.id ===id;
-                });
-                this.todolist.splice(index,1);
-            },
-            doneToggle: function(id){
-                const index = this.todolist.findIndex(function(item){
-                    return item.id === id;
-                })
-                this.todolist[index].done = !this.todolist[index].done;
-            },
-        }
+        // methods:{
+        //     checked: function(done) {
+        //         console.log(done);
+        //         if (done) {
+        //             return {
+        //                 checked: true
+        //             };
+        //         } else {
+        //             checked: false
+        //         }
+        //     },
+        //     addTodo: function(e){
+        //         if( this.todo.trim() !== ""){
+        //             this.todolist.push({ id : new Date().getTime(), todo : this.todo.trim(), done:false });
+        //             this.todo = "";
+        //         }
+        //     },
+        //     deleteTodo: function(id){
+        //         const index = this.todolist.findIndex(function(item){
+        //             return item.id ===id;
+        //         });
+        //         this.todolist.splice(index,1);
+        //     },
+        //     doneToggle: function(id){
+        //         const index = this.todolist.findIndex(function(item){
+        //             return item.id === id;
+        //         })
+        //         this.todolist[index].done = !this.todolist[index].done;
+        //     },
+        // }
     })
 
     console.log(vm);

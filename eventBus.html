@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>06-24</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+<!-- 이벤트 버스 객체 -->
+<script type="text/javascript">
+    var eventBus = new Vue();
+</script>
+
+<!-- 자식 컴포넌트1 -->
+<template id="chidl1Template">
+    <div>
+        <button v-on:click="clickEvent">child1 button!!</button>
+        <div>{{currentTime}}</div>
+    </div>
+</template>
+<script type="text/javascript">
+    Vue.component('child1-component', {
+        template : '#chidl1Template',
+        data : function() {
+            return { currentTime : '' };
+        },
+        methods : {
+            clickEvent : function() {
+                const date = new Date();
+                const time = date.toLocaleTimeString() + " " + date.getMilliseconds() + "ms";
+                // $emit으로 이벤트 트리거
+                eventBus.$emit('click1', time);
+                this.currentTime = time;
+            }
+        }
+    });
+</script>
+<!-- 자식 컴포넌트1-->
+
+<!-- 자식 컴포넌트2-->
+<template id="chidl2Template">
+    <ul>
+        <li v-for="t in timelist">{{t}}</li>
+    </ul>
+</template>
+<script type="text/javascript">
+    Vue.component('child2-component', {
+        template : '#chidl2Template',
+        data : function() {
+            return {
+                timelist : []
+            };
+        },
+        // $on으로 이벤트 수신 정보를 등록할 수 있다. 즉, 이벤트 감지.
+        // 라이프사이클의 created 이벤트 훅으로 Vue인스턴스 생성시 이벤트 등록.
+        created : function() {
+            eventBus.$on('click1', this.child1Click);
+        },
+        methods : {
+            child1Click : function(time) {
+                this.timelist.push(time);
+            }
+        }
+    });
+</script>
+<!-- 자식 컴포넌트2-->
+<body>
+
+
+<div id="app">
+    <child1-component></child1-component>
+    <hr />
+    <child2-component></child2-component>
+</div>
+</body>
+<script type="text/javascript">
+    var vm = new Vue({
+        el : "#app"
+    })
+</script>
+</html>
